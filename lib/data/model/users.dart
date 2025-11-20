@@ -1,4 +1,4 @@
-class User {
+class Users {
   final int? id;
   final String username;
   final String password;
@@ -7,7 +7,7 @@ class User {
   final String alamat;
   final String telepon;
 
-  User({
+  Users({
     this.id,
     required this.username,
     required this.password,
@@ -17,7 +17,7 @@ class User {
     required this.telepon,
   });
 
-  // ubah objek User jadi map ke database
+  // ubah objek Users jadi map ke database
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -30,9 +30,9 @@ class User {
     };
   }
 
-  // ubah map dari database jadi objek User
-  factory User.fromMap(Map<String, dynamic> map) {
-    return User(
+  // ubah map dari database jadi objek Users
+  factory Users.fromMap(Map<String, dynamic> map) {
+    return Users(
       id: map['id'],
       username: map['username'],
       password: map['password'],
