@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:KirofTix/data/presentation/login_page.dart';
+import 'package:KirofTix/presentation/login_page.dart';
 
 void main() {
   runApp(const MainApp());
@@ -18,17 +18,17 @@ class MainApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xFF2C3E50),
           primary: const Color(0xFF2C3E50), // Warna tombol & appbar
-          secondary: const Color(0xFFE74C3C), // Warna aksen tombol logout & cancel
+          secondary: const Color(
+            0xFFE74C3C,
+          ), // Warna aksen tombol logout & cancel
         ),
         useMaterial3: true,
         // default style input form
         inputDecorationTheme: InputDecorationTheme(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8.0),
-          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
           filled: true,
           fillColor: Colors.grey[100],
-        )
+        ),
       ),
       home: const LoginPage(),
     );

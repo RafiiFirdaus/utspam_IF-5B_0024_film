@@ -69,14 +69,14 @@ class DbHelper {
     }
   }
 
-Future<Users?> loginUser(String username, String password) async {
+  Future<Users?> loginUser(String username, String password) async {
     final db = await instance.database;
     final List<Map<String, dynamic>> maps = await db.query(
       'users',
       where: 'username = ? AND password = ?',
       whereArgs: [username, password],
     );
-    
+
     if (maps.isNotEmpty) {
       return Users.fromMap(maps.first);
     } else {
@@ -127,10 +127,6 @@ Future<Users?> loginUser(String username, String password) async {
   // dan transaksi dihapus dari database
   Future<int> deleteTransaction(int id) async {
     final db = await instance.database;
-    return await db.delete(
-      'transactions',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    return await db.delete('transactions', where: 'id = ?', whereArgs: [id]);
   }
 }
