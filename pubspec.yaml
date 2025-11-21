@@ -1,5 +1,5 @@
-name: kiroft_movies
-description: "A new Flutter project."
+name: KirofTix
+description: "UTS Pemrograman Aplikasi Mobile - KirofTix"
 publish_to: 'none'
 version: 0.1.0
 
@@ -10,6 +10,16 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # database
+  sqflite: ^2.2.8+4
+  path: ^1.8.3
+
+  # format uang dan tanggal
+  intl: ^0.18.1
+
+  # ikon
+  cupertino_icons: ^1.0.8
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -17,3 +27,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  # assets
+  assets:
+    - lib/assets/images/kiroftix.png
+    - lib/assets/images/unable.png
