@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:KirofTix/data/db/db_helper.dart';
 import 'package:KirofTix/data/model/users.dart';
 import 'package:KirofTix/data/model/transactions.dart';
-// import 'package:KirofTix/presentation/.dart';
+import 'package:KirofTix/presentation/detail_page.dart';
 
 class HistoryPage extends StatefulWidget {
   final Users user;
