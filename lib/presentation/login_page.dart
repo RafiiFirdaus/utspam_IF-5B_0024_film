@@ -119,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        child: const Text('Login', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                        child: const Text('MASUK', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
                       ),
                     ),
                     const SizedBox(height: 16),
