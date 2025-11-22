@@ -111,7 +111,12 @@ class _RegisterPageState extends State<RegisterPage> {
                 controller: _phoneController,
                 keyboardType: TextInputType.phone,
                 decoration: const InputDecoration(labelText: 'No. Telepon', prefixIcon: Icon(Icons.phone)),
-                validator: (value) => value!.isEmpty ? 'Wajib diisi' : null,
+                validator: (value) {
+                  if (value == null || value.isEmpty) return 'Wajib diisi';
+                  // harus berisi 11 sampai 13 digit
+                  if (value.length < 11 || value.length > 13) return 'No. Telepon harus 11-13 digit';
+                  return null;
+                },
               ),
               const SizedBox(height: 12),
 
