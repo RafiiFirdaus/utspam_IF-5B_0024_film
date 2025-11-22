@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:KirofTix/data/db/db_helper.dart';
 import 'package:KirofTix/data/model/users.dart';
+import 'package:KirofTix/presentation/register_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -69,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     // logo
-                    Image.asset('assets/images/kiroftix_logo.png', height: 100),
+                    Image.asset('assets/images/kiroftix.png', height: 100),
                     const SizedBox(height: 16),
 
                     // input username
