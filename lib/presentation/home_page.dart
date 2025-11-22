@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:KirofTix/data/model/users.dart';
 import 'package:KirofTix/data/model/movies.dart';
 import 'package:KirofTix/data/repository/movies_repo.dart';
-// import purchase page
+import 'package:KirofTix/presentation/purchase_page.dart';
 // import history page
 // import profile page untuk logout
 
