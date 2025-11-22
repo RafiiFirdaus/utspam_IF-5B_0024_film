@@ -4,8 +4,9 @@ import 'package:KirofTix/data/model/users.dart';
 import 'package:KirofTix/data/model/movies.dart';
 import 'package:KirofTix/data/repository/movies_repo.dart';
 import 'package:KirofTix/presentation/purchase_page.dart';
-// import history page
-// import profile page untuk logout
+import 'package:KirofTix/presentation/profile_page.dart';
+import 'package:KirofTix/presentation/history_page.dart';
+
 
 class HomePage extends StatefulWidget {
   final Users user;
@@ -205,7 +206,7 @@ class _HomePageState extends State<HomePage> {
                                           builder: (context) => PurchasePage(
                                             user: widget.user,
                                             movie: movie,
-                                            selectedSchedule: jadwal,
+                                            jadwal: jadwal,
                                           ),
                                         ),
                                       );

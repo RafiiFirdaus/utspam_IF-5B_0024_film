@@ -4,7 +4,7 @@ import 'package:KirofTix/data/model/transactions.dart';
 import 'package:KirofTix/data/model/users.dart';
 import 'package:KirofTix/data/model/movies.dart';
 import 'package:KirofTix/data/db/db_helper.dart';
-// import history page
+import 'package:KirofTix/presentation/history_page.dart';
 
 class PurchasePage extends StatefulWidget {
   final Users user;
@@ -77,7 +77,7 @@ class _PurchasePageState extends State<PurchasePage> {
 
       // simpan ke database
       DbHelper dbHelper = DbHelper();
-      int result = await dbHelper.insertTransaction(newTransaction);
+      await dbHelper.insertTransaction(newTransaction);
 
       // tampil pesan berhasil dan pindah ke halaman riwayat
       showDialog(
