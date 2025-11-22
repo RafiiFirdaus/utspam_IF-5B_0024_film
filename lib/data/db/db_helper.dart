@@ -113,13 +113,13 @@ class DbHelper {
     });
   }
 
-  Future<int> updateTransactionStatus(int id, String status) async {
+  Future<int> updateTransaction(Transactions transaction) async {
     final db = await instance.database;
     return await db.update(
       'transactions',
-      {'status': status},
+      transaction.toMap(),
       where: 'id = ?',
-      whereArgs: [id],
+      whereArgs: [transaction.id],
     );
   }
 

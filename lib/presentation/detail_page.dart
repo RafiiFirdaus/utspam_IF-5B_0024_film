@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:KirofTix/data/model/transactions.dart';
 import 'package:KirofTix/data/db/db_helper.dart';
-// import edit page
+import 'package:KirofTix/presentation/edit_page.dart';
 
 class DetailPage extends StatefulWidget {
   final Transactions transactions;
@@ -72,7 +72,7 @@ class _DetailPageState extends State<DetailPage> {
     );
 
     // terima data yang diupdate dari halaman edit
-    if (result != null && result is Transactions) {
+    if (result is Transactions) {
       setState(() async {
         _currentData = await result; // perbarui data transaksi
       });
