@@ -30,10 +30,10 @@ flutter:
 
   # assets
   assets:
-    - lib/assets/images/kiroftix.png
-    - lib/assets/images/unable.png
-    - lib/assets/images/nysm_nyd.jpg
-    - lib/assets/images/predator_badlands.jpg
-    - lib/assets/images/rental_family.jpg
-    - lib/assets/images/tbg2.jpg
-    - lib/assets/images/tlw.jpg
+    - assets/images/kiroftix.png
+    - assets/images/unable.png
+    - assets/images/nysm_nyd.jpg
+    - assets/images/predator_badlands.jpg
+    - assets/images/rental_family.jpg
+    - assets/images/tbg2.jpg
+    - assets/images/tlw.jpg
