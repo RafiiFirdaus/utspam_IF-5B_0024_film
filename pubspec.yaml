@@ -32,3 +32,8 @@ flutter:
   assets:
     - lib/assets/images/kiroftix.png
     - lib/assets/images/unable.png
+    - lib/assets/images/nysm_nyd.jpg
+    - lib/assets/images/predator_badlands.jpg
+    - lib/assets/images/rental_family.jpg
+    - lib/assets/images/tbg2.jpg
+    - lib/assets/images/tlw.jpg
