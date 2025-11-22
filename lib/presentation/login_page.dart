@@ -54,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       // background gelap
-      backgroundColor: Colors.grey[200],
+      backgroundColor: const Color(0xFF0F172A),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
@@ -71,7 +71,11 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     // logo
-                    Image.asset('assets/images/kiroftix.png', height: 100),
+                    Image.asset(
+                      'assets/images/kiroftix.png',
+                      height: 300,
+                      width: 300,
+                    ),
                     const SizedBox(height: 16),
 
                     // input username
@@ -120,7 +124,13 @@ class _LoginPageState extends State<LoginPage> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        child: const Text('MASUK', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                        child: const Text(
+                          'MASUK',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -148,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),
