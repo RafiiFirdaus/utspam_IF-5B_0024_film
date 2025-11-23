@@ -13,6 +13,9 @@ dependencies:
   # database
   sqflite: ^2.2.8+4
   path: ^1.8.3
+  
+  # untuk tracking versi database
+  shared_preferences: ^2.2.2
 
   # format uang dan tanggal
   intl: ^0.18.1

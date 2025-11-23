@@ -3,10 +3,12 @@ import 'package:path/path.dart';
 import 'package:KirofTix/data/model/users.dart';
 import 'package:KirofTix/data/model/transactions.dart';
 import 'dart:developer' as developer;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DbHelper {
-  static const String dbname =
-      "kiroftix_v4.db"; // Ganti nama database untuk force recreate
+  static const String dbname = "kiroftix.db";
+  static const int currentDbVersion = 5; // Versi database saat ini
+  static const String dbVersionKey = 'database_version';
 
   static final DbHelper instance = DbHelper._init();
   static Database? _database;
@@ -46,15 +48,64 @@ class DbHelper {
     developer.log('Database baru berhasil dibuat');
   }
 
+  // Fungsi untuk cek dan reset database jika versi tidak cocok
+  Future<void> _checkAndResetDatabaseIfNeeded(String dbPath) async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedVersion = prefs.getInt(dbVersionKey) ?? 0;
+
+    developer.log('===== CEK VERSI DATABASE =====');
+    developer.log('Versi tersimpan: $savedVersion');
+    developer.log('Versi saat ini: $currentDbVersion');
+
+    if (savedVersion != currentDbVersion) {
+      developer.log('VERSI TIDAK COCOK! Menghapus semua database lama...');
+
+      // Tutup database jika ada
+      if (_database != null) {
+        await _database!.close();
+        _database = null;
+      }
+
+      // Hapus semua database lama
+      final oldDatabases = [
+        'kiroftix.db',
+        'kiroftix_v2.db',
+        'kiroftix_v3.db',
+        'kiroftix_v4.db',
+        'kiroftix_v5.db',
+      ];
+
+      for (var oldDb in oldDatabases) {
+        final oldPath = join(dbPath, oldDb);
+        try {
+          await deleteDatabase(oldPath);
+          developer.log('Database dihapus: $oldDb');
+        } catch (e) {
+          developer.log('Database tidak ditemukan: $oldDb');
+        }
+      }
+
+      // Simpan versi baru
+      await prefs.setInt(dbVersionKey, currentDbVersion);
+      developer.log('Versi database diupdate ke: $currentDbVersion');
+    } else {
+      developer.log('Versi database sudah sesuai, tidak perlu reset');
+    }
+  }
+
   Future<Database> _initDatabase(String filePath) async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
+
+    // CEK DAN RESET DATABASE JIKA VERSI TIDAK COCOK
+    await _checkAndResetDatabaseIfNeeded(dbPath);
+
     developer.log('===== DATABASE PATH =====');
     developer.log('Database location: $path');
 
     final db = await openDatabase(
       path,
-      version: 4,
+      version: 5,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
@@ -78,7 +129,61 @@ class DbHelper {
       await _migrateOldSchema(db);
     }
 
+    // Cek schema tabel transactions
+    final transTableInfo = await db.rawQuery('PRAGMA table_info(transactions)');
+    developer.log('===== SCHEMA TABEL TRANSACTIONS =====');
+
+    bool hasJudulFilmColumn = false;
+    bool hasMovieTitleColumn = false;
+    bool hasDateColumn = false;
+    bool hasTanggalTransaksiColumn = false;
+
+    for (var column in transTableInfo) {
+      developer.log('Column: ${column['name']} - Type: ${column['type']}');
+      if (column['name'] == 'judulFilm') hasJudulFilmColumn = true;
+      if (column['name'] == 'movieTitle') hasMovieTitleColumn = true;
+      if (column['name'] == 'date') hasDateColumn = true;
+      if (column['name'] == 'tanggalTransaksi')
+        hasTanggalTransaksiColumn = true;
+    }
+
+    // Jika masih ada kolom lama di transactions, paksa recreate
+    if ((hasMovieTitleColumn && !hasJudulFilmColumn) ||
+        (hasDateColumn && !hasTanggalTransaksiColumn)) {
+      developer.log(
+        'DETEKSI SCHEMA LAMA DI TRANSACTIONS! Melakukan migrasi paksa...',
+      );
+      await _migrateOldTransactionsSchema(db);
+    }
+
     return db;
+  }
+
+  // Fungsi untuk migrasi paksa tabel transactions dari schema lama ke baru
+  Future<void> _migrateOldTransactionsSchema(Database db) async {
+    developer.log('===== MIGRASI SCHEMA TRANSACTIONS LAMA =====');
+
+    // Hapus tabel transactions lama
+    await db.execute('DROP TABLE IF EXISTS transactions');
+    developer.log('Tabel transactions lama dihapus');
+
+    // Buat tabel transactions baru dengan schema baru
+    await db.execute('''
+      CREATE TABLE transactions (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          username TEXT NOT NULL,
+          judulFilm TEXT NOT NULL,
+          poster TEXT NOT NULL,
+          jadwalFilm TEXT NOT NULL,
+          jumlahTiket INTEGER NOT NULL,
+          totalHarga INTEGER NOT NULL,
+          metodePembayaran TEXT NOT NULL,
+          noKartu TEXT,
+          status TEXT NOT NULL,
+          tanggalTransaksi TEXT NOT NULL
+      )
+    ''');
+    developer.log('Tabel transactions baru dibuat dengan schema yang benar');
   }
 
   // Fungsi untuk migrasi paksa dari schema lama ke baru
@@ -169,8 +274,8 @@ class DbHelper {
     developer.log('Upgrade dari versi $oldVersion ke $newVersion');
 
     // Migrasi untuk semua versi lama
-    if (oldVersion < 4) {
-      developer.log('Menghapus tabel users lama...');
+    if (oldVersion < 5) {
+      developer.log('Menghapus semua tabel lama...');
       // Hapus tabel lama dan buat ulang dengan schema baru
       await db.execute('DROP TABLE IF EXISTS users');
       await db.execute('DROP TABLE IF EXISTS transactions');
@@ -209,9 +314,8 @@ class DbHelper {
         'Database upgraded: Tabel dibuat ulang dengan kolom yang benar',
       );
     }
-  }
+  } // CRUD users
 
-  // CRUD users
   Future<int> registerUser(Users user) async {
     final db = await instance.database;
     try {
