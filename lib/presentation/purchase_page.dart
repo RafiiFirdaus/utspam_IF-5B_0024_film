@@ -105,11 +105,7 @@ class _PurchasePageState extends State<PurchasePage> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Scaffold(
-                      body: HistoryPage(
-                        user: widget.user,
-                      ), // langsung ke halaman riwayat
-                    ),
+                    builder: (context) => HistoryPage(user: widget.user),
                   ),
                 );
               },
@@ -172,7 +168,7 @@ class _PurchasePageState extends State<PurchasePage> {
                         Text(
                           'Jadwal: ${widget.jadwal}',
                           style: const TextStyle(
-                            color: Color(0x0ff74c3c),
+                            color: Color(0xFFE74C3C),
                             fontWeight: FontWeight.bold,
                           ),
                         ),

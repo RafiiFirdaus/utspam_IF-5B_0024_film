@@ -7,7 +7,6 @@ import 'package:KirofTix/presentation/purchase_page.dart';
 import 'package:KirofTix/presentation/profile_page.dart';
 import 'package:KirofTix/presentation/history_page.dart';
 
-
 class HomePage extends StatefulWidget {
   final Users user;
   const HomePage({super.key, required this.user});
@@ -166,6 +165,16 @@ class _HomePageState extends State<HomePage> {
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              movie.genre,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[600],
                               ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,

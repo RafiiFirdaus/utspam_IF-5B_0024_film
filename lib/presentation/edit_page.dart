@@ -112,7 +112,7 @@ class _EditPageState extends State<EditPage> {
                   labelText: 'Metode Pembayaran',
                   prefixIcon: Icon(Icons.payment),
                 ),
-                items: ['Cash', 'Kartu Kredit', 'Kartu Debit']
+                items: ['Cash', 'Credit Card', 'Debit Card']
                     .map((m) => DropdownMenuItem(value: m, child: Text(m)))
                     .toList(),
                 onChanged: (value) {
