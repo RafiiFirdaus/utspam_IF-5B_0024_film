@@ -5,6 +5,7 @@ import 'package:KirofTix/data/model/users.dart';
 import 'package:KirofTix/data/model/movies.dart';
 import 'package:KirofTix/data/db/db_helper.dart';
 import 'package:KirofTix/presentation/history_page.dart';
+import 'dart:developer' as developer;
 
 class PurchasePage extends StatefulWidget {
   final Users user;
@@ -61,6 +62,14 @@ class _PurchasePageState extends State<PurchasePage> {
   // simpan transaksi
   void _submitTransaction() async {
     if (_formKey.currentState!.validate()) {
+      developer.log('===== SUBMIT TRANSACTION =====');
+      developer.log('Username: ${widget.user.username}');
+      developer.log('Judul Film: ${widget.movie.judul}');
+      developer.log('Jadwal: ${widget.jadwal}');
+      developer.log('Jumlah: ${_jumlahController.text}');
+      developer.log('Total: $_totalPrice');
+      developer.log('Metode: $_paymentMethod');
+
       // buat objek transaksi
       Transactions newTransaction = Transactions(
         username: widget.user.username,
@@ -75,9 +84,12 @@ class _PurchasePageState extends State<PurchasePage> {
         status: 'Selesai', // status awal
       );
 
+      developer.log('Transaction Map: ${newTransaction.toMap()}');
+
       // simpan ke database
       DbHelper dbHelper = DbHelper();
-      await dbHelper.insertTransaction(newTransaction);
+      int result = await dbHelper.insertTransaction(newTransaction);
+      developer.log('Insert result: $result');
 
       // tampil pesan berhasil dan pindah ke halaman riwayat
       showDialog(
@@ -159,9 +171,14 @@ class _PurchasePageState extends State<PurchasePage> {
                         const SizedBox(height: 8),
                         Text(
                           'Jadwal: ${widget.jadwal}',
-                          style: const TextStyle(color: Color(0xFF74C3C), fontWeight: FontWeight.bold),
+                          style: const TextStyle(
+                            color: Color(0x0ff74c3c),
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                        Text('Harga: ${formatRupiah.format(widget.movie.harga)} / tiket'),
+                        Text(
+                          'Harga: ${formatRupiah.format(widget.movie.harga)} / tiket',
+                        ),
                       ],
                     ),
                   ),
@@ -178,7 +195,7 @@ class _PurchasePageState extends State<PurchasePage> {
                 decoration: const InputDecoration(
                   labelText: 'Nama Lengkap',
                   prefixIcon: Icon(Icons.person),
-                  filled: true
+                  filled: true,
                 ),
               ),
               const SizedBox(height: 16),
@@ -190,7 +207,7 @@ class _PurchasePageState extends State<PurchasePage> {
                 decoration: const InputDecoration(
                   labelText: 'Tanggal Pembelian',
                   prefixIcon: Icon(Icons.calendar_today),
-                  filled: true
+                  filled: true,
                 ),
               ),
               const SizedBox(height: 16),
@@ -224,10 +241,7 @@ class _PurchasePageState extends State<PurchasePage> {
                   prefixIcon: Icon(Icons.payment),
                 ),
                 items: _paymentMethods.map((method) {
-                  return DropdownMenuItem(
-                    value: method,
-                    child: Text(method),
-                  );
+                  return DropdownMenuItem(value: method, child: Text(method));
                 }).toList(),
                 onChanged: (String? newValue) {
                   setState(() {
@@ -313,13 +327,10 @@ class _PurchasePageState extends State<PurchasePage> {
                   ),
                   child: const Text(
                     'Beli Tiket',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),
