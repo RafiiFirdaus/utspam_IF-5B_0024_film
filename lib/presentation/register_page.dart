@@ -22,12 +22,12 @@ class _RegisterPageState extends State<RegisterPage> {
     if (_formKey.currentState!.validate()) {
       // buat objek user baru
       Users newUser = Users(
-        username: _usernameController.text,
-        password: _passwordController.text,
-        email: _emailController.text,
-        telepon: _phoneController.text,
-        nama: _nameController.text,
-        alamat: _addressController.text,
+        username: _usernameController.text.trim(),
+        password: _passwordController.text.trim(),
+        email: _emailController.text.trim(),
+        telepon: _phoneController.text.trim(),
+        nama: _nameController.text.trim(),
+        alamat: _addressController.text.trim(),
       );
 
       // simpan ke database
@@ -69,18 +69,24 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text("Silakan lengkapi data diri anda",
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      // color: Colors.grey
-                      color: Color(0xFF2C3E50))),
+              const Text(
+                "Silakan lengkapi data diri anda",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  // color: Colors.grey
+                  color: Color(0xFF2C3E50),
+                ),
+              ),
               const SizedBox(height: 20),
 
               // nama lengkap
               TextFormField(
                 controller: _nameController,
-                decoration: const InputDecoration(labelText: 'Nama Lengkap', prefixIcon: Icon(Icons.badge)),
+                decoration: const InputDecoration(
+                  labelText: 'Nama Lengkap',
+                  prefixIcon: Icon(Icons.badge),
+                ),
                 validator: (value) => value!.isEmpty ? 'Wajib diisi' : null,
               ),
               const SizedBox(height: 12),
@@ -88,12 +94,16 @@ class _RegisterPageState extends State<RegisterPage> {
               // Email
               TextFormField(
                 controller: _emailController,
-                decoration: const InputDecoration(labelText: 'Email (@gmail.com)', prefixIcon: Icon(Icons.email)),
+                decoration: const InputDecoration(
+                  labelText: 'Email (@gmail.com)',
+                  prefixIcon: Icon(Icons.email),
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) return 'Wajib diisi';
-                  if (!value.contains('@gmail.com')) return 'Format email tidak valid';
+                  if (!value.contains('@gmail.com'))
+                    return 'Format email tidak valid';
                   return null;
-                }
+                },
               ),
               const SizedBox(height: 12),
 
@@ -101,7 +111,10 @@ class _RegisterPageState extends State<RegisterPage> {
               TextFormField(
                 controller: _addressController,
                 maxLines: 2,
-                decoration: const InputDecoration(labelText: 'Alamat', prefixIcon: Icon(Icons.home)),
+                decoration: const InputDecoration(
+                  labelText: 'Alamat',
+                  prefixIcon: Icon(Icons.home),
+                ),
                 validator: (value) => value!.isEmpty ? 'Wajib diisi' : null,
               ),
               const SizedBox(height: 12),
@@ -110,11 +123,15 @@ class _RegisterPageState extends State<RegisterPage> {
               TextFormField(
                 controller: _phoneController,
                 keyboardType: TextInputType.phone,
-                decoration: const InputDecoration(labelText: 'No. Telepon', prefixIcon: Icon(Icons.phone)),
+                decoration: const InputDecoration(
+                  labelText: 'No. Telepon',
+                  prefixIcon: Icon(Icons.phone),
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) return 'Wajib diisi';
                   // harus berisi 11 sampai 13 digit
-                  if (value.length < 11 || value.length > 13) return 'No. Telepon harus 11-13 digit';
+                  if (value.length < 11 || value.length > 13)
+                    return 'No. Telepon harus 11-13 digit';
                   return null;
                 },
               ),
@@ -126,7 +143,10 @@ class _RegisterPageState extends State<RegisterPage> {
               // username
               TextFormField(
                 controller: _usernameController,
-                decoration: const InputDecoration(labelText: 'Username', prefixIcon: Icon(Icons.person_outline)),
+                decoration: const InputDecoration(
+                  labelText: 'Username',
+                  prefixIcon: Icon(Icons.person_outline),
+                ),
                 validator: (value) => value!.isEmpty ? 'Wajib diisi' : null,
               ),
               const SizedBox(height: 12),
@@ -135,7 +155,10 @@ class _RegisterPageState extends State<RegisterPage> {
               TextFormField(
                 controller: _passwordController,
                 obscureText: true,
-                decoration: const InputDecoration(labelText: 'Password', prefixIcon: Icon(Icons.lock_outline)),
+                decoration: const InputDecoration(
+                  labelText: 'Password',
+                  prefixIcon: Icon(Icons.lock_outline),
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) return 'Wajib diisi';
                   if (value.length < 6) return 'Minimal 6 karakter';
@@ -144,7 +167,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     return 'Harus mengandung angka';
                   }
                   return null;
-                }
+                },
               ),
               const SizedBox(height: 30),
 
@@ -158,9 +181,11 @@ class _RegisterPageState extends State<RegisterPage> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: const Text('DAFTAR', style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold),))
+                child: const Text(
+                  'DAFTAR',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+              ),
             ],
           ),
         ),

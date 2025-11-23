@@ -2,6 +2,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:KirofTix/data/model/users.dart';
 import 'package:KirofTix/data/model/transactions.dart';
+import 'dart:developer' as developer;
 
 class DbHelper {
   static const String dbname = "kiroftix.db";
@@ -24,7 +25,12 @@ class DbHelper {
   Future<Database> _initDatabase(String filePath) async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
-    return await openDatabase(path, version: 1, onCreate: _onCreate);
+    return await openDatabase(
+      path,
+      version: 2,
+      onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
+    );
   }
 
   Future<void> _onCreate(Database db, int version) async {
@@ -35,9 +41,9 @@ class DbHelper {
             username TEXT UNIQUE NOT NULL,
             email TEXT UNIQUE NOT NULL,
             password TEXT NOT NULL,
-            fullName TEXT NOT NULL,
-            address TEXT NOT NULL,
-            phone TEXT NOT NULL
+            nama TEXT NOT NULL,
+            alamat TEXT NOT NULL,
+            telepon TEXT NOT NULL
         )
         ''');
 
@@ -59,18 +65,71 @@ class DbHelper {
         ''');
   }
 
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      // Hapus tabel lama dan buat ulang dengan schema baru
+      await db.execute('DROP TABLE IF EXISTS users');
+      await db.execute('''
+        CREATE TABLE users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE NOT NULL,
+            email TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL,
+            nama TEXT NOT NULL,
+            alamat TEXT NOT NULL,
+            telepon TEXT NOT NULL
+        )
+        ''');
+      developer.log(
+        'Database upgraded: Tabel users dibuat ulang dengan kolom yang benar',
+      );
+    }
+  }
+
   // CRUD users
   Future<int> registerUser(Users user) async {
     final db = await instance.database;
     try {
-      return await db.insert('users', user.toMap());
+      developer.log('===== REGISTER USER =====');
+      developer.log('Username: "${user.username}"');
+      developer.log('Email: "${user.email}"');
+      developer.log('Password: "${user.password}"');
+
+      final result = await db.insert('users', user.toMap());
+      developer.log('Register berhasil dengan ID: $result');
+      return result;
     } catch (e) {
+      developer.log('Register gagal: $e', error: e);
+
+      // Cek data yang sudah ada
+      final existingUsers = await db.query('users');
+      developer.log('Jumlah user di database: ${existingUsers.length}');
+      for (var u in existingUsers) {
+        developer.log(
+          'User existing - Username: "${u['username']}", Email: "${u['email']}"',
+        );
+      }
+
       return -1; // error jika email / username sudah ada
     }
   }
 
   Future<Users?> loginUser(String username, String password) async {
     final db = await instance.database;
+
+    developer.log('===== LOGIN USER =====');
+    developer.log('Input Username/Email: "$username"');
+    developer.log('Input Password: "$password"');
+
+    // Cek semua user di database
+    final allUsers = await db.query('users');
+    developer.log('Total user di database: ${allUsers.length}');
+    for (var u in allUsers) {
+      developer.log(
+        'User DB - Username: "${u['username']}", Email: "${u['email']}", Password: "${u['password']}"',
+      );
+    }
+
     final List<Map<String, dynamic>> maps = await db.query(
       'users',
       where: 'username = ? AND password = ?',
@@ -78,8 +137,10 @@ class DbHelper {
     );
 
     if (maps.isNotEmpty) {
+      developer.log('Login berhasil dengan username');
       return Users.fromMap(maps.first);
     } else {
+      developer.log('Username tidak cocok, mencoba dengan email...');
       // coba login dengan email jika username tidak ditemukan
       final List<Map<String, dynamic>> mapsEmail = await db.query(
         'users',
@@ -87,7 +148,10 @@ class DbHelper {
         whereArgs: [username, password],
       );
       if (mapsEmail.isNotEmpty) {
+        developer.log('Login berhasil dengan email');
         return Users.fromMap(mapsEmail.first);
+      } else {
+        developer.log('Login gagal - Username/Email atau password salah');
       }
     }
     return null; // user tidak ditemukan

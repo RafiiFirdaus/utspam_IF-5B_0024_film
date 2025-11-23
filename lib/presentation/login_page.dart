@@ -19,8 +19,8 @@ class _LoginPageState extends State<LoginPage> {
   // fungsi login
   void _login() async {
     if (_formKey.currentState!.validate()) {
-      String username = _usernameController.text;
-      String password = _passwordController.text;
+      String username = _usernameController.text.trim();
+      String password = _passwordController.text.trim();
 
       // cek database
       DbHelper dbHelper = DbHelper();
@@ -105,6 +105,10 @@ class _LoginPageState extends State<LoginPage> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Masukkan password';
+                        } else if (value.length < 6) {
+                          return 'Password minimal 6 karakter';
+                        } else if (!RegExp(r'[0-9]').hasMatch(value)) {
+                          return 'Harus mengandung angka';
                         }
                         return null;
                       },

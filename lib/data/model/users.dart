@@ -36,10 +36,19 @@ class Users {
       id: map['id'],
       username: map['username'],
       password: map['password'],
-      nama: map['nama'],
+      nama:
+          map['nama'] ??
+          map['fullName'] ??
+          '', // kompatibilitas dengan schema lama
       email: map['email'],
-      alamat: map['alamat'],
-      telepon: map['telepon'],
+      alamat:
+          map['alamat'] ??
+          map['address'] ??
+          '', // kompatibilitas dengan schema lama
+      telepon:
+          map['telepon'] ??
+          map['phone'] ??
+          '', // kompatibilitas dengan schema lama
     );
   }
 }
